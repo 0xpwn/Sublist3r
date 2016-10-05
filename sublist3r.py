@@ -1084,7 +1084,17 @@ def main():
 
         if ports:
             print G+"[-] Start port scan now for the following ports: %s%s"%(Y,ports)+W
-            ports = ports.split(',')
+            if ',' in ports:
+                ports = ports.split(',')
+            elif '-' in ports:
+                ports_range = ports.split('-')
+                try:
+                    ports_range[0] = int(ports_range[0])
+                    ports_range[1] = int(ports_range[1])
+                except:
+                    print R + "[-]Something is wrong with the ports you entered"+W
+                    exit(1)
+                ports = range(ports_range[0], ports_range[1] + 1)
             pscan = portscan(subdomains,ports)
             pscan.run()
 
